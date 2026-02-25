@@ -3,7 +3,7 @@ import { z } from 'astro/zod';
 // UI metadata for rendering config panel controls
 export interface FieldMeta {
   label: string;
-  type: 'text' | 'textarea' | 'color' | 'select' | 'number' | 'url';
+  type: 'text' | 'textarea' | 'color' | 'select' | 'radio' | 'number' | 'url';
   options?: { label: string; value: string }[];
   placeholder?: string;
   min?: number;
@@ -178,6 +178,7 @@ export const exitIntentSchema = z.object({
   buttonBgColor: z.string().default('#ea580c'),
   buttonTextColor: z.string().default('#ffffff'),
   overlayColor: z.string().default('rgba(0,0,0,0.6)'),
+  showOnce: z.enum(['once', 'every']).default('once'),
   matchUrl: z.string().default('*'),
 });
 
@@ -187,6 +188,15 @@ export const exitIntentMeta: Record<keyof ExitIntentConfig, FieldMeta> = {
   matchUrl: { label: 'URL to Demo', type: 'text', placeholder: '*', sidebar: true },
   buttonBgColor: { label: 'Primary Color', type: 'color', sidebar: true },
   buttonUrl: { label: 'Apply Now URL', type: 'url', placeholder: 'https://www.mastercard.com', sidebar: true },
+  showOnce: {
+    label: 'Trigger Frequency',
+    type: 'radio',
+    sidebar: true,
+    options: [
+      { label: 'Once per Session', value: 'once' },
+      { label: 'Every Time', value: 'every' },
+    ],
+  },
   title: { label: 'Title', type: 'text', placeholder: 'Dialog title' },
   message: { label: 'Message', type: 'textarea', placeholder: 'Main message' },
   imageUrl: { label: 'Image URL', type: 'url', placeholder: 'https://...' },
@@ -197,6 +207,35 @@ export const exitIntentMeta: Record<keyof ExitIntentConfig, FieldMeta> = {
   overlayColor: { label: 'Overlay Color', type: 'text', placeholder: 'rgba(0,0,0,0.6)' },
 };
 
+// --- Floating Button ---
+export const floatingButtonSchema = z.object({
+  buttonText: z.string().default('Apply Now'),
+  buttonUrl: z.string().url().default('https://www.mastercard.com'),
+  bgColor: z.string().default('#ea580c'),
+  textColor: z.string().default('#ffffff'),
+  position: z.enum(['bottom-right', 'bottom-left']).default('bottom-right'),
+  matchUrl: z.string().default('*'),
+});
+
+export type FloatingButtonConfig = z.infer<typeof floatingButtonSchema>;
+
+export const floatingButtonMeta: Record<keyof FloatingButtonConfig, FieldMeta> = {
+  matchUrl: { label: 'URL to Demo', type: 'text', placeholder: '*', sidebar: true },
+  bgColor: { label: 'Primary Color', type: 'color', sidebar: true },
+  buttonUrl: { label: 'Apply Now URL', type: 'url', placeholder: 'https://www.mastercard.com', sidebar: true },
+  position: {
+    label: 'Position',
+    type: 'radio',
+    sidebar: true,
+    options: [
+      { label: 'Bottom Right', value: 'bottom-right' },
+      { label: 'Bottom Left', value: 'bottom-left' },
+    ],
+  },
+  buttonText: { label: 'Button Text', type: 'text', placeholder: 'Apply Now' },
+  textColor: { label: 'Text Color', type: 'color' },
+};
+
 // Registry
 export const schemas = {
   'popup-dialog': { schema: popupDialogSchema, meta: popupDialogMeta },
@@ -204,6 +243,7 @@ export const schemas = {
   'countdown-offer': { schema: countdownOfferSchema, meta: countdownOfferMeta },
   'mini-poll': { schema: miniPollSchema, meta: miniPollMeta },
   'exit-intent': { schema: exitIntentSchema, meta: exitIntentMeta },
+  'floating-button': { schema: floatingButtonSchema, meta: floatingButtonMeta },
 } as const;
 
 export type UseCaseId = keyof typeof schemas;
@@ -215,6 +255,7 @@ export const primaryColorKey: Record<UseCaseId, string> = {
   'countdown-offer': 'primaryColor',
   'mini-poll': 'primaryColor',
   'exit-intent': 'buttonBgColor',
+  'floating-button': 'bgColor',
 };
 
 /** Which config key holds the CTA destination URL for each use case */
@@ -224,4 +265,5 @@ export const ctaUrlKey: Record<UseCaseId, string> = {
   'countdown-offer': 'ctaUrl',
   'mini-poll': 'ctaUrl',
   'exit-intent': 'buttonUrl',
+  'floating-button': 'buttonUrl',
 };

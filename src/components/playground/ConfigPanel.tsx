@@ -17,7 +17,23 @@ export function ConfigPanel({ config, meta, onChange }: Props) {
       {entries.map(([key, field]) => (
         <div key={key}>
           <label class="block text-sm font-medium text-gray-700 mb-1">{field.label}</label>
-          {field.type === 'select' ? (
+          {field.type === 'radio' ? (
+            <div class="flex gap-3">
+              {field.options?.map((opt) => (
+                <label key={opt.value} class="flex items-center gap-1.5 cursor-pointer">
+                  <input
+                    type="radio"
+                    name={key}
+                    value={opt.value}
+                    checked={config[key] === opt.value}
+                    onChange={() => onChange(key, opt.value)}
+                    class="accent-blue-600"
+                  />
+                  <span class="text-sm text-gray-700">{opt.label}</span>
+                </label>
+              ))}
+            </div>
+          ) : field.type === 'select' ? (
             <select
               class="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none"
               value={config[key]}

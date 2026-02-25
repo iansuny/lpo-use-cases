@@ -4,6 +4,7 @@ import { generateStickyBannerScript } from './script-templates/sticky-banner';
 import { generateCountdownOfferScript } from './script-templates/countdown-offer';
 import { generateMiniPollScript } from './script-templates/mini-poll';
 import { generateExitIntentScript } from './script-templates/exit-intent';
+import { generateFloatingButtonScript } from './script-templates/floating-button';
 
 const generators: Record<UseCaseId, (config: any) => string> = {
   'popup-dialog': generatePopupDialogScript,
@@ -11,6 +12,7 @@ const generators: Record<UseCaseId, (config: any) => string> = {
   'countdown-offer': generateCountdownOfferScript,
   'mini-poll': generateMiniPollScript,
   'exit-intent': generateExitIntentScript,
+  'floating-button': generateFloatingButtonScript,
 };
 
 export function generateScript(id: UseCaseId, config: Record<string, any>): string {

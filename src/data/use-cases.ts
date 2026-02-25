@@ -47,4 +47,12 @@ export const useCases: UseCase[] = [
     icon: '🚪',
     tags: ['exit-intent', 'modal', 'retention', 'mouseleave'],
   },
+  {
+    id: 'floating-button',
+    title: 'Floating Button',
+    description:
+      'A fixed floating CTA button that stays in the corner of the viewport. Simple and effective for persistent call-to-action.',
+    icon: '🔘',
+    tags: ['floating', 'cta', 'button', 'fixed'],
+  },
 ];

@@ -8,6 +8,7 @@ import { StickyBannerPreview } from '../previews/StickyBannerPreview';
 import { CountdownOfferPreview } from '../previews/CountdownOfferPreview';
 import { MiniPollPreview } from '../previews/MiniPollPreview';
 import { ExitIntentPreview } from '../previews/ExitIntentPreview';
+import { FloatingButtonPreview } from '../previews/FloatingButtonPreview';
 
 interface UseCaseItem {
   id: UseCaseId;
@@ -22,6 +23,7 @@ const useCaseList: UseCaseItem[] = [
   { id: 'countdown-offer', title: 'Countdown Bar', icon: '⏱️', description: 'Countdown timer with social proof' },
   { id: 'mini-poll', title: 'Mini Poll', icon: '📋', description: 'Multi-select persona quiz' },
   { id: 'exit-intent', title: 'Exit Intent', icon: '🚪', description: 'Retain leaving visitors with a dialog' },
+  { id: 'floating-button', title: 'Floating Button', icon: '🔘', description: 'Fixed floating CTA button' },
 ];
 
 const previewComponents: Record<UseCaseId, (props: { config: any; viewportMode: ViewportMode }) => any> = {
@@ -30,6 +32,7 @@ const previewComponents: Record<UseCaseId, (props: { config: any; viewportMode: 
   'countdown-offer': CountdownOfferPreview,
   'mini-poll': MiniPollPreview,
   'exit-intent': ExitIntentPreview,
+  'floating-button': FloatingButtonPreview,
 };
 
 function getDefaults(id: UseCaseId): Record<string, any> {
@@ -48,6 +51,7 @@ export function Dashboard() {
     'countdown-offer': getDefaults('countdown-offer'),
     'mini-poll': getDefaults('mini-poll'),
     'exit-intent': getDefaults('exit-intent'),
+    'floating-button': getDefaults('floating-button'),
   }));
 
   const config = configs[activeId];

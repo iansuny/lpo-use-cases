@@ -16,7 +16,8 @@ export function generateExitIntentScript(config: ExitIntentConfig): string {
   console.log('Script implemented.');
 
   var STORAGE_KEY = 'lpo_exit_intent_shown';
-  if (sessionStorage.getItem(STORAGE_KEY)) return;
+  var SHOW_ONCE = ${config.showOnce === 'once' ? 'true' : 'false'};
+  if (SHOW_ONCE && sessionStorage.getItem(STORAGE_KEY)) return;
 
   var CONFIG = ${JSON.stringify(
     {
@@ -40,7 +41,7 @@ export function generateExitIntentScript(config: ExitIntentConfig): string {
   document.addEventListener('mouseleave', function(e) {
     if (e.clientY < 0 && !shown) {
       shown = true;
-      sessionStorage.setItem(STORAGE_KEY, 'true');
+      if (SHOW_ONCE) sessionStorage.setItem(STORAGE_KEY, 'true');
       showDialog();
     }
   });
