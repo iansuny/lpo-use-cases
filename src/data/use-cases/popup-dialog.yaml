@@ -1,0 +1,8 @@
+id: popup-dialog
+title: Popup Dialog
+description: A customizable modal dialog that appears on page load or after a delay. Great for promotions, announcements, or lead capture.
+icon: "💬"
+tags:
+  - modal
+  - promotion
+  - lead-capture

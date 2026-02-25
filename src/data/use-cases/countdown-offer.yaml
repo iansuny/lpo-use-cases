@@ -1,0 +1,8 @@
+id: countdown-offer
+title: Countdown Offer
+description: An urgency-driven component with a countdown timer. Perfect for limited-time offers, flash sales, or event deadlines.
+icon: "⏱️"
+tags:
+  - countdown
+  - urgency
+  - sale

@@ -1,0 +1,8 @@
+id: sticky-banner
+title: Sticky Banner
+description: A fixed banner that stays at the top or bottom of the viewport. Ideal for announcements, cookie notices, or promotional messages.
+icon: "📢"
+tags:
+  - banner
+  - announcement
+  - sticky
