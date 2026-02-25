@@ -55,4 +55,12 @@ export const useCases: UseCase[] = [
     icon: '🔘',
     tags: ['floating', 'cta', 'button', 'fixed'],
   },
+  {
+    id: 'social-proof',
+    title: 'Social Proof',
+    description:
+      'A floating CTA button with a chat bubble showing how many people have already applied. Builds trust and urgency.',
+    icon: '👥',
+    tags: ['social-proof', 'floating', 'cta', 'trust'],
+  },
 ];

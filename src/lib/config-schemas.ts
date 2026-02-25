@@ -236,6 +236,39 @@ export const floatingButtonMeta: Record<keyof FloatingButtonConfig, FieldMeta> =
   textColor: { label: 'Text Color', type: 'color' },
 };
 
+// --- Social Proof ---
+export const socialProofSchema = z.object({
+  proofCount: z.number().min(0).max(99999).default(1247),
+  proofText: z.string().default('people have already applied this week'),
+  buttonText: z.string().default('Apply'),
+  buttonUrl: z.string().url().default('https://www.mastercard.com'),
+  bgColor: z.string().default('#ea580c'),
+  textColor: z.string().default('#ffffff'),
+  position: z.enum(['bottom-right', 'bottom-left']).default('bottom-right'),
+  matchUrl: z.string().default('*'),
+});
+
+export type SocialProofConfig = z.infer<typeof socialProofSchema>;
+
+export const socialProofMeta: Record<keyof SocialProofConfig, FieldMeta> = {
+  matchUrl: { label: 'URL to Demo', type: 'text', placeholder: '*', sidebar: true },
+  bgColor: { label: 'Primary Color', type: 'color', sidebar: true },
+  buttonUrl: { label: 'Apply Now URL', type: 'url', placeholder: 'https://www.mastercard.com', sidebar: true },
+  position: {
+    label: 'Position',
+    type: 'radio',
+    sidebar: true,
+    options: [
+      { label: 'Bottom Right', value: 'bottom-right' },
+      { label: 'Bottom Left', value: 'bottom-left' },
+    ],
+  },
+  proofCount: { label: 'Proof Count', type: 'number', min: 0, max: 99999 },
+  proofText: { label: 'Proof Text', type: 'text', placeholder: 'people have already applied this week' },
+  buttonText: { label: 'Button Text', type: 'text', placeholder: 'Apply' },
+  textColor: { label: 'Text Color', type: 'color' },
+};
+
 // Registry
 export const schemas = {
   'popup-dialog': { schema: popupDialogSchema, meta: popupDialogMeta },
@@ -244,6 +277,7 @@ export const schemas = {
   'mini-poll': { schema: miniPollSchema, meta: miniPollMeta },
   'exit-intent': { schema: exitIntentSchema, meta: exitIntentMeta },
   'floating-button': { schema: floatingButtonSchema, meta: floatingButtonMeta },
+  'social-proof': { schema: socialProofSchema, meta: socialProofMeta },
 } as const;
 
 export type UseCaseId = keyof typeof schemas;
@@ -256,6 +290,7 @@ export const primaryColorKey: Record<UseCaseId, string> = {
   'mini-poll': 'primaryColor',
   'exit-intent': 'buttonBgColor',
   'floating-button': 'bgColor',
+  'social-proof': 'bgColor',
 };
 
 /** Which config key holds the CTA destination URL for each use case */
@@ -266,4 +301,5 @@ export const ctaUrlKey: Record<UseCaseId, string> = {
   'mini-poll': 'ctaUrl',
   'exit-intent': 'buttonUrl',
   'floating-button': 'buttonUrl',
+  'social-proof': 'buttonUrl',
 };

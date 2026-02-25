@@ -9,6 +9,7 @@ import { CountdownOfferPreview } from '../previews/CountdownOfferPreview';
 import { MiniPollPreview } from '../previews/MiniPollPreview';
 import { ExitIntentPreview } from '../previews/ExitIntentPreview';
 import { FloatingButtonPreview } from '../previews/FloatingButtonPreview';
+import { SocialProofPreview } from '../previews/SocialProofPreview';
 
 interface UseCaseItem {
   id: UseCaseId;
@@ -24,6 +25,7 @@ const useCaseList: UseCaseItem[] = [
   { id: 'mini-poll', title: 'Mini Poll', icon: '📋', description: 'Multi-select persona quiz' },
   { id: 'exit-intent', title: 'Exit Intent', icon: '🚪', description: 'Retain leaving visitors with a dialog' },
   { id: 'floating-button', title: 'Floating Button', icon: '🔘', description: 'Fixed floating CTA button' },
+  { id: 'social-proof', title: 'Social Proof', icon: '👥', description: 'CTA with social proof bubble' },
 ];
 
 const previewComponents: Record<UseCaseId, (props: { config: any; viewportMode: ViewportMode }) => any> = {
@@ -33,6 +35,7 @@ const previewComponents: Record<UseCaseId, (props: { config: any; viewportMode: 
   'mini-poll': MiniPollPreview,
   'exit-intent': ExitIntentPreview,
   'floating-button': FloatingButtonPreview,
+  'social-proof': SocialProofPreview,
 };
 
 function getDefaults(id: UseCaseId): Record<string, any> {
@@ -52,6 +55,7 @@ export function Dashboard() {
     'mini-poll': getDefaults('mini-poll'),
     'exit-intent': getDefaults('exit-intent'),
     'floating-button': getDefaults('floating-button'),
+    'social-proof': getDefaults('social-proof'),
   }));
 
   const config = configs[activeId];
