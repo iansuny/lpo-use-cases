@@ -8,7 +8,10 @@
       "Bash(npx astro:*)",
       "Bash(rm -rf node_modules package-lock.json && npm install 2>&1)",
       "Bash(npm run:*)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "Bash(gh api:*)"
     ]
   }
 }

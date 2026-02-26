@@ -6,6 +6,7 @@ import { generateMiniPollScript } from './script-templates/mini-poll';
 import { generateExitIntentScript } from './script-templates/exit-intent';
 import { generateFloatingButtonScript } from './script-templates/floating-button';
 import { generateSocialProofScript } from './script-templates/social-proof';
+import { generateDyScriptScript } from './script-templates/dy-script';
 
 const generators: Record<UseCaseId, (config: any) => string> = {
   'popup-dialog': generatePopupDialogScript,
@@ -15,6 +16,7 @@ const generators: Record<UseCaseId, (config: any) => string> = {
   'exit-intent': generateExitIntentScript,
   'floating-button': generateFloatingButtonScript,
   'social-proof': generateSocialProofScript,
+  'dy-script': generateDyScriptScript,
 };
 
 export function generateScript(id: UseCaseId, config: Record<string, any>): string {

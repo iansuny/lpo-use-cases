@@ -10,6 +10,7 @@ import { MiniPollPreview } from '../previews/MiniPollPreview';
 import { ExitIntentPreview } from '../previews/ExitIntentPreview';
 import { FloatingButtonPreview } from '../previews/FloatingButtonPreview';
 import { SocialProofPreview } from '../previews/SocialProofPreview';
+import { DyScriptPreview } from '../previews/DyScriptPreview';
 
 interface UseCaseItem {
   id: UseCaseId;
@@ -26,6 +27,7 @@ const useCaseList: UseCaseItem[] = [
   { id: 'exit-intent', title: 'Exit Intent', icon: '🚪', description: 'Retain leaving visitors with a dialog' },
   { id: 'floating-button', title: 'Floating Button', icon: '🔘', description: 'Fixed floating CTA button' },
   { id: 'social-proof', title: 'Social Proof', icon: '👥', description: 'CTA with social proof bubble' },
+  { id: 'dy-script', title: 'DY Script', icon: '🧪', description: 'DynamicYield script injection' },
 ];
 
 const previewComponents: Record<UseCaseId, (props: { config: any; viewportMode: ViewportMode }) => any> = {
@@ -36,6 +38,7 @@ const previewComponents: Record<UseCaseId, (props: { config: any; viewportMode: 
   'exit-intent': ExitIntentPreview,
   'floating-button': FloatingButtonPreview,
   'social-proof': SocialProofPreview,
+  'dy-script': DyScriptPreview,
 };
 
 function getDefaults(id: UseCaseId): Record<string, any> {
@@ -56,6 +59,7 @@ export function Dashboard() {
     'exit-intent': getDefaults('exit-intent'),
     'floating-button': getDefaults('floating-button'),
     'social-proof': getDefaults('social-proof'),
+    'dy-script': getDefaults('dy-script'),
   }));
 
   const config = configs[activeId];

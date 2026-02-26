@@ -63,4 +63,12 @@ export const useCases: UseCase[] = [
     icon: '👥',
     tags: ['social-proof', 'floating', 'cta', 'trust'],
   },
+  {
+    id: 'dy-script',
+    title: 'DY Script',
+    description:
+      'Inject DynamicYield scripts into a target page for testing. No visual UI — configure Session ID and target URL.',
+    icon: '🧪',
+    tags: ['dynamic-yield', 'script', 'testing', 'injection'],
+  },
 ];

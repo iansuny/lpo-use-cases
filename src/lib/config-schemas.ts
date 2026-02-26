@@ -269,6 +269,19 @@ export const socialProofMeta: Record<keyof SocialProofConfig, FieldMeta> = {
   textColor: { label: 'Text Color', type: 'color' },
 };
 
+// --- DY Script ---
+export const dyScriptSchema = z.object({
+  sessionId: z.string().default('YOUR_SESSION_ID'),
+  matchUrl: z.string().default('*'),
+});
+
+export type DyScriptConfig = z.infer<typeof dyScriptSchema>;
+
+export const dyScriptMeta: Record<keyof DyScriptConfig, FieldMeta> = {
+  matchUrl: { label: 'URL to Demo', type: 'text', placeholder: '*', sidebar: true },
+  sessionId: { label: 'Session ID', type: 'text', placeholder: 'YOUR_SESSION_ID', sidebar: true },
+};
+
 // Registry
 export const schemas = {
   'popup-dialog': { schema: popupDialogSchema, meta: popupDialogMeta },
@@ -278,6 +291,7 @@ export const schemas = {
   'exit-intent': { schema: exitIntentSchema, meta: exitIntentMeta },
   'floating-button': { schema: floatingButtonSchema, meta: floatingButtonMeta },
   'social-proof': { schema: socialProofSchema, meta: socialProofMeta },
+  'dy-script': { schema: dyScriptSchema, meta: dyScriptMeta },
 } as const;
 
 export type UseCaseId = keyof typeof schemas;
@@ -291,6 +305,7 @@ export const primaryColorKey: Record<UseCaseId, string> = {
   'exit-intent': 'buttonBgColor',
   'floating-button': 'bgColor',
   'social-proof': 'bgColor',
+  'dy-script': '_noop',
 };
 
 /** Which config key holds the CTA destination URL for each use case */
@@ -302,4 +317,5 @@ export const ctaUrlKey: Record<UseCaseId, string> = {
   'exit-intent': 'buttonUrl',
   'floating-button': 'buttonUrl',
   'social-proof': 'buttonUrl',
+  'dy-script': '_noop',
 };
