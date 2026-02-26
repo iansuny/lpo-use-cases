@@ -57,7 +57,7 @@ export function generateMiniPollScript(config: MiniPollConfig): string {
   style.textContent = \`
     .lpo-poll-fab {
       position: fixed; bottom: 30px;
-      \${posLeft ? 'left: 30px;' : 'right: 30px;'}
+      ${posLeft ? 'left: 30px;' : 'right: 30px;'}
       z-index: 999998; opacity: 0; transform: translateY(20px);
       transition: all 0.4s cubic-bezier(0.16,1,0.3,1);
     }
@@ -65,7 +65,7 @@ export function generateMiniPollScript(config: MiniPollConfig): string {
     .lpo-poll-fab-wrap { position: relative; }
     .lpo-poll-tooltip {
       position: absolute; top: 50%; transform: translateY(-50%);
-      \${posLeft ? 'left: 70px;' : 'right: 70px;'}
+      ${posLeft ? 'left: 70px;' : 'right: 70px;'}
       background: #fff; padding: 10px 16px; border-radius: 10px;
       box-shadow: 0 4px 20px rgba(0,0,0,0.15);
       font: 600 13px/1.4 system-ui,sans-serif; color: #1a1a1a;
@@ -73,7 +73,7 @@ export function generateMiniPollScript(config: MiniPollConfig): string {
     }
     .lpo-poll-tooltip::after {
       content:''; position: absolute; top: 50%; transform: translateY(-50%);
-      \${posLeft
+      ${posLeft
         ? 'left: -8px; border-right: 8px solid #fff; border-top: 8px solid transparent; border-bottom: 8px solid transparent;'
         : 'right: -8px; border-left: 8px solid #fff; border-top: 8px solid transparent; border-bottom: 8px solid transparent;'
       }
