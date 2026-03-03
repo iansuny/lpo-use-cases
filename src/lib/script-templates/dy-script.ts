@@ -30,7 +30,7 @@ export function generateDyScriptScript(config: DyScriptConfig): string {
 
   // DY config
   window.DY = window.DY || {};
-  // window.DY.recommendationContext = { type: '{page type}', data: ['data'] };
+  window.DY.recommendationContext = { type: 'HOMEPAGE' };
 
   // Load DY scripts
   var scripts = [
