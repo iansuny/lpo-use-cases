@@ -286,6 +286,7 @@ export const dyScriptMeta: Record<keyof DyScriptConfig, FieldMeta> = {
 export const scratchCardSchema = z.object({
   primaryColor: z.string().default('#ea580c'),
   ctaUrl: z.string().default('https://www.mastercard.com'),
+  delaySeconds: z.number().min(0).max(60).default(10),
   matchUrl: z.string().default('*'),
 });
 
@@ -295,6 +296,24 @@ export const scratchCardMeta: Record<keyof ScratchCardConfig, FieldMeta> = {
   matchUrl: { label: 'URL to Demo', type: 'text', placeholder: '*', sidebar: true },
   primaryColor: { label: 'Primary Color', type: 'color', sidebar: true },
   ctaUrl: { label: 'Apply Now URL', type: 'url', placeholder: 'https://www.mastercard.com', sidebar: true },
+  delaySeconds: { label: 'Delay (seconds)', type: 'number', min: 0, max: 60, sidebar: true },
+};
+
+// --- Spin Wheel ---
+export const spinWheelSchema = z.object({
+  primaryColor: z.string().default('#ea580c'),
+  ctaUrl: z.string().default('https://www.mastercard.com'),
+  delaySeconds: z.number().min(0).max(60).default(10),
+  matchUrl: z.string().default('*'),
+});
+
+export type SpinWheelConfig = z.infer<typeof spinWheelSchema>;
+
+export const spinWheelMeta: Record<keyof SpinWheelConfig, FieldMeta> = {
+  matchUrl: { label: 'URL to Demo', type: 'text', placeholder: '*', sidebar: true },
+  primaryColor: { label: 'Primary Color', type: 'color', sidebar: true },
+  ctaUrl: { label: 'Apply Now URL', type: 'url', placeholder: 'https://www.mastercard.com', sidebar: true },
+  delaySeconds: { label: 'Delay (seconds)', type: 'number', min: 0, max: 60, sidebar: true },
 };
 
 // Registry
@@ -308,6 +327,7 @@ export const schemas = {
   'social-proof': { schema: socialProofSchema, meta: socialProofMeta },
   'dy-script': { schema: dyScriptSchema, meta: dyScriptMeta },
   'scratch-card': { schema: scratchCardSchema, meta: scratchCardMeta },
+  'spin-wheel': { schema: spinWheelSchema, meta: spinWheelMeta },
 } as const;
 
 export type UseCaseId = keyof typeof schemas;
@@ -323,6 +343,7 @@ export const primaryColorKey: Record<UseCaseId, string> = {
   'social-proof': 'bgColor',
   'dy-script': '_noop',
   'scratch-card': 'primaryColor',
+  'spin-wheel': 'primaryColor',
 };
 
 /** Which config key holds the CTA destination URL for each use case */
@@ -336,4 +357,5 @@ export const ctaUrlKey: Record<UseCaseId, string> = {
   'social-proof': 'buttonUrl',
   'dy-script': '_noop',
   'scratch-card': 'ctaUrl',
+  'spin-wheel': 'ctaUrl',
 };

@@ -8,6 +8,7 @@ import { generateFloatingButtonScript } from './script-templates/floating-button
 import { generateSocialProofScript } from './script-templates/social-proof';
 import { generateDyScriptScript } from './script-templates/dy-script';
 import { generateScratchCardScript } from './script-templates/scratch-card';
+import { generateSpinWheelScript } from './script-templates/spin-wheel';
 
 const generators: Record<UseCaseId, (config: any) => string> = {
   'popup-dialog': generatePopupDialogScript,
@@ -19,6 +20,7 @@ const generators: Record<UseCaseId, (config: any) => string> = {
   'social-proof': generateSocialProofScript,
   'dy-script': generateDyScriptScript,
   'scratch-card': generateScratchCardScript,
+  'spin-wheel': generateSpinWheelScript,
 };
 
 export function generateScript(id: UseCaseId, config: Record<string, any>): string {

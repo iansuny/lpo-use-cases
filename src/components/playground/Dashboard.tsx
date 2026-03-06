@@ -12,6 +12,7 @@ import { FloatingButtonPreview } from '../previews/FloatingButtonPreview';
 import { SocialProofPreview } from '../previews/SocialProofPreview';
 import { DyScriptPreview } from '../previews/DyScriptPreview';
 import { ScratchCardPreview } from '../previews/ScratchCardPreview';
+import { SpinWheelPreview } from '../previews/SpinWheelPreview';
 
 interface UseCaseItem {
   id: UseCaseId;
@@ -30,6 +31,7 @@ const useCaseList: UseCaseItem[] = [
   { id: 'social-proof', title: 'Social Proof', icon: '👥', description: 'CTA with social proof bubble' },
   { id: 'dy-script', title: 'DY Script', icon: '🧪', description: 'DynamicYield script injection' },
   { id: 'scratch-card', title: 'Scratch Card', icon: '🎰', description: 'Gamified scratch card popup' },
+  { id: 'spin-wheel', title: 'Spin Wheel', icon: '🎡', description: 'Lucky spin wheel popup' },
 ];
 
 const previewComponents: Record<UseCaseId, (props: { config: any; viewportMode: ViewportMode }) => any> = {
@@ -42,6 +44,7 @@ const previewComponents: Record<UseCaseId, (props: { config: any; viewportMode: 
   'social-proof': SocialProofPreview,
   'dy-script': DyScriptPreview,
   'scratch-card': ScratchCardPreview,
+  'spin-wheel': SpinWheelPreview,
 };
 
 function getDefaults(id: UseCaseId): Record<string, any> {
@@ -64,6 +67,7 @@ export function Dashboard() {
     'social-proof': getDefaults('social-proof'),
     'dy-script': getDefaults('dy-script'),
     'scratch-card': getDefaults('scratch-card'),
+    'spin-wheel': getDefaults('spin-wheel'),
   }));
 
   const config = configs[activeId];

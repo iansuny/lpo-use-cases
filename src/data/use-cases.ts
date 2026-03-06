@@ -79,4 +79,12 @@ export const useCases: UseCase[] = [
     icon: '🎰',
     tags: ['scratch-card', 'gamification', 'popup', 'offer'],
   },
+  {
+    id: 'spin-wheel',
+    title: 'Spin Wheel',
+    description:
+      'A lucky spin wheel popup with 5 prize slots. Users spin to win a reward and receive a redemption code to copy.',
+    icon: '🎡',
+    tags: ['spin-wheel', 'gamification', 'popup', 'lucky-draw'],
+  },
 ];

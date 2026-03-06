@@ -19,6 +19,7 @@ export function generateScratchCardScript(config: ScratchCardConfig): string {
     {
       primaryColor: config.primaryColor,
       ctaUrl: config.ctaUrl,
+      delaySeconds: config.delaySeconds,
     },
     null,
     2
@@ -194,6 +195,6 @@ export function generateScratchCardScript(config: ScratchCardConfig): string {
     });
   }
 
-  setTimeout(createScratchCard, 1000);
+  setTimeout(createScratchCard, CONFIG.delaySeconds * 1000);
 })();`;
 }
