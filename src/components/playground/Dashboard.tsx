@@ -11,6 +11,7 @@ import { ExitIntentPreview } from '../previews/ExitIntentPreview';
 import { FloatingButtonPreview } from '../previews/FloatingButtonPreview';
 import { SocialProofPreview } from '../previews/SocialProofPreview';
 import { DyScriptPreview } from '../previews/DyScriptPreview';
+import { ScratchCardPreview } from '../previews/ScratchCardPreview';
 
 interface UseCaseItem {
   id: UseCaseId;
@@ -28,6 +29,7 @@ const useCaseList: UseCaseItem[] = [
   { id: 'floating-button', title: 'Floating Button', icon: '🔘', description: 'Fixed floating CTA button' },
   { id: 'social-proof', title: 'Social Proof', icon: '👥', description: 'CTA with social proof bubble' },
   { id: 'dy-script', title: 'DY Script', icon: '🧪', description: 'DynamicYield script injection' },
+  { id: 'scratch-card', title: 'Scratch Card', icon: '🎰', description: 'Gamified scratch card popup' },
 ];
 
 const previewComponents: Record<UseCaseId, (props: { config: any; viewportMode: ViewportMode }) => any> = {
@@ -39,6 +41,7 @@ const previewComponents: Record<UseCaseId, (props: { config: any; viewportMode: 
   'floating-button': FloatingButtonPreview,
   'social-proof': SocialProofPreview,
   'dy-script': DyScriptPreview,
+  'scratch-card': ScratchCardPreview,
 };
 
 function getDefaults(id: UseCaseId): Record<string, any> {
@@ -60,6 +63,7 @@ export function Dashboard() {
     'floating-button': getDefaults('floating-button'),
     'social-proof': getDefaults('social-proof'),
     'dy-script': getDefaults('dy-script'),
+    'scratch-card': getDefaults('scratch-card'),
   }));
 
   const config = configs[activeId];

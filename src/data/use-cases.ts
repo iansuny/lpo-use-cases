@@ -71,4 +71,12 @@ export const useCases: UseCase[] = [
     icon: '🧪',
     tags: ['dynamic-yield', 'script', 'testing', 'injection'],
   },
+  {
+    id: 'scratch-card',
+    title: 'Scratch Card',
+    description:
+      'A gamified scratch card popup that reveals a hidden offer. Users scratch to uncover rewards and get a CTA to claim.',
+    icon: '🎰',
+    tags: ['scratch-card', 'gamification', 'popup', 'offer'],
+  },
 ];
