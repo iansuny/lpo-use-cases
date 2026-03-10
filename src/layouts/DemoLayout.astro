@@ -1,0 +1,61 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const {
+  title,
+  description = 'Horizon Mastercard World — Earn unlimited cashback, travel rewards, and exclusive perks with the card designed for your lifestyle.',
+} = Astro.props;
+const base = import.meta.env.BASE_URL;
+const canonicalUrl = new URL(Astro.url.pathname, Astro.site);
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalUrl} />
+    <link rel="canonical" href={canonicalUrl} />
+    <link rel="icon" type="image/svg+xml" href={`${base}/favicon.svg`} />
+    <title>{title}</title>
+    <style is:global>
+      html { scroll-behavior: smooth; }
+      /* Non-modal overlay: only target the preview component (first child) */
+      .uc-overlay:not(.uc-overlay-modal) > *:first-child {
+        position: fixed !important;
+        inset: 0 !important;
+        background: transparent !important;
+        min-height: 0 !important;
+        pointer-events: none !important;
+        overflow: visible !important;
+      }
+      /* Hide simulated page content (first grandchild = gray bars) */
+      .uc-overlay:not(.uc-overlay-modal) > *:first-child > *:first-child {
+        display: none !important;
+      }
+      /* Make actual widget elements interactive */
+      .uc-overlay:not(.uc-overlay-modal) > *:first-child > *:not(:first-child) {
+        pointer-events: auto !important;
+      }
+      /* Modal overlay: only target the preview component (first child) */
+      .uc-overlay-modal > *:first-child {
+        position: fixed !important;
+        inset: 0 !important;
+        min-height: 0 !important;
+        pointer-events: auto !important;
+      }
+    </style>
+  </head>
+  <body class="min-h-screen bg-white text-gray-900 flex flex-col" style="font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;">
+    <slot />
+  </body>
+</html>

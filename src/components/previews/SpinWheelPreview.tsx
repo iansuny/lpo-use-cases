@@ -3,12 +3,13 @@ import type { SpinWheelConfig } from '../../lib/config-schemas';
 
 interface Props {
   config: SpinWheelConfig;
+  onClose?: () => void;
 }
 
 const PRIZES = ['5% Cashback', 'NT$500 Bonus', 'Free Annual Fee', '3X Points', 'NT$200 Voucher', '2% Rebate'];
 const REDEMPTION_CODE = 'MC-LUCKY-2025';
 
-export function SpinWheelPreview({ config }: Props) {
+export function SpinWheelPreview({ config, onClose }: Props) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [spinning, setSpinning] = useState(false);
   const [result, setResult] = useState<string | null>(null);
@@ -138,8 +139,19 @@ export function SpinWheelPreview({ config }: Props) {
     <div
       class="relative flex items-center justify-center overflow-hidden h-full"
       style={{ background: 'rgba(0,0,0,0.5)', minHeight: '420px' }}
+      onClick={(e) => { if (onClose && e.target === e.currentTarget) onClose(); }}
     >
       <div class="relative rounded-xl shadow-lg bg-white mx-4" style={{ maxWidth: 560 }}>
+        {onClose && (
+          <button
+            class="absolute top-2 right-3 bg-transparent border-none text-2xl z-10 cursor-pointer"
+            style={{ color: '#9ca3af' }}
+            aria-label="Close"
+            onClick={onClose}
+          >
+            &times;
+          </button>
+        )}
         <div class="flex flex-row items-center">
           {/* Left: Wheel */}
           <div class="text-center p-6 border-r border-gray-100">

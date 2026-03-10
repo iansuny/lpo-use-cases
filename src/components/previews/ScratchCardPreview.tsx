@@ -3,11 +3,12 @@ import type { ScratchCardConfig } from '../../lib/config-schemas';
 
 interface Props {
   config: ScratchCardConfig;
+  onClose?: () => void;
 }
 
 const REDEMPTION_CODE = 'MC-CASHBACK-2025';
 
-export function ScratchCardPreview({ config }: Props) {
+export function ScratchCardPreview({ config, onClose }: Props) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [isScratching, setIsScratching] = useState(false);
   const [copied, setCopied] = useState(false);
@@ -80,8 +81,19 @@ export function ScratchCardPreview({ config }: Props) {
     <div
       class="relative flex items-center justify-center overflow-hidden h-full"
       style={{ background: 'rgba(0,0,0,0.5)', minHeight: '320px' }}
+      onClick={(e) => { if (onClose && e.target === e.currentTarget) onClose(); }}
     >
       <div class="relative text-center rounded-xl p-8 shadow-lg max-w-sm w-full mx-4 bg-white">
+        {onClose && (
+          <button
+            class="absolute top-2 right-3 bg-transparent border-none text-2xl cursor-pointer"
+            style={{ color: '#9ca3af' }}
+            aria-label="Close"
+            onClick={onClose}
+          >
+            &times;
+          </button>
+        )}
         <h2 class="text-xl font-bold mb-2 text-gray-900">Scratch to Reveal Your Offer!</h2>
         <p class="text-sm text-gray-500 mb-4">Use your mouse to scratch the card below</p>
 

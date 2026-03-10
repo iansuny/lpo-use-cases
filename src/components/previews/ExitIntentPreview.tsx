@@ -3,15 +3,17 @@ import type { ExitIntentConfig } from '../../lib/config-schemas';
 interface Props {
   config: ExitIntentConfig;
   viewportMode?: 'desktop' | 'mobile';
+  onClose?: () => void;
 }
 
-export function ExitIntentPreview({ config, viewportMode = 'desktop' }: Props) {
+export function ExitIntentPreview({ config, viewportMode = 'desktop', onClose }: Props) {
   const mobile = viewportMode === 'mobile';
 
   return (
     <div
       class="relative flex items-center justify-center overflow-hidden h-full"
       style={{ background: config.overlayColor, minHeight: '320px' }}
+      onClick={(e) => { if (onClose && e.target === e.currentTarget) onClose(); }}
     >
       <div
         class={`relative shadow-2xl overflow-hidden ${
@@ -38,9 +40,10 @@ export function ExitIntentPreview({ config, viewportMode = 'desktop' }: Props) {
           }`}
         >
           <button
-            class="absolute top-2 right-3 bg-transparent border-none text-2xl cursor-default"
-            style={{ color: config.textColor, opacity: 0.5 }}
+            class="absolute top-2 right-3 bg-transparent border-none text-2xl"
+            style={{ color: config.textColor, opacity: 0.5, cursor: onClose ? 'pointer' : 'default' }}
             aria-label="Close"
+            onClick={onClose}
           >
             &times;
           </button>
