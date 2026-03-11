@@ -53,6 +53,20 @@ const canonicalUrl = new URL(Astro.url.pathname, Astro.site);
         min-height: 0 !important;
         pointer-events: auto !important;
       }
+
+      /* ─── Responsive ─── */
+      @media (max-width: 768px) {
+        .demo-nav-links { display: none !important; }
+        .demo-hero-inner { flex-direction: column !important; }
+        .demo-hero-card { display: none !important; }
+        .demo-hero-title { font-size: 34px !important; }
+        .demo-section-title { font-size: 26px !important; }
+        .demo-grid-3 { grid-template-columns: 1fr !important; gap: 20px !important; }
+        .demo-grid-4 { grid-template-columns: repeat(2, 1fr) !important; }
+        .demo-rewards-inner { flex-direction: column !important; }
+        .demo-section { padding-top: 48px !important; padding-bottom: 48px !important; }
+        .demo-footer-inner { flex-direction: column !important; text-align: center !important; }
+      }
     </style>
   </head>
   <body class="min-h-screen bg-white text-gray-900 flex flex-col" style="font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;">
