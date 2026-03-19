@@ -9,17 +9,21 @@ import { FloatingButtonPreview } from '../previews/FloatingButtonPreview';
 import { SocialProofPreview } from '../previews/SocialProofPreview';
 import { ScratchCardPreview } from '../previews/ScratchCardPreview';
 import { SpinWheelPreview } from '../previews/SpinWheelPreview';
+import { variantLabels, type VariantId } from '../../lib/hero-variants';
+import { applyVariant, saveOriginals, restoreOriginals, type OriginalSnapshot } from '../../lib/hero-dom';
 
 interface UseCaseEntry {
   id: UseCaseId;
   title: string;
   icon: string;
   modal?: boolean;
-  /** Modal trigger type */
   trigger?: 'delay' | 'exit-intent';
+  /** DOM manipulation use case (no overlay rendering) */
+  domManipulation?: boolean;
 }
 
 const useCaseList: UseCaseEntry[] = [
+  { id: 'hero-personalization', title: 'Hero Personalization', icon: '🎯', domManipulation: true },
   { id: 'popup-dialog', title: 'Popup Dialog', icon: '💬', modal: true, trigger: 'delay' },
   { id: 'sticky-banner', title: 'Sticky Banner', icon: '📢' },
   { id: 'countdown-offer', title: 'Countdown Bar', icon: '⏱️' },
@@ -44,6 +48,7 @@ const previewComponents: Record<string, (props: { config: any; viewportMode?: st
 };
 
 const STORAGE_KEY = 'lpo-demo-enabled';
+const VARIANT_STORAGE_KEY = 'lpo-hero-variant';
 
 function getDefaults(id: UseCaseId): Record<string, any> {
   const { schema } = schemas[id];
@@ -55,7 +60,10 @@ function loadEnabled(): Set<UseCaseId> {
     const raw = sessionStorage.getItem(STORAGE_KEY);
     if (raw) {
       const ids = JSON.parse(raw) as string[];
-      return new Set(ids.filter((id) => id in previewComponents) as UseCaseId[]);
+      const validIds = Object.keys(previewComponents);
+      return new Set(
+        ids.filter((id) => validIds.includes(id) || id === 'hero-personalization') as UseCaseId[]
+      );
     }
   } catch {}
   return new Set();
@@ -67,21 +75,54 @@ function saveEnabled(set: Set<UseCaseId>) {
   } catch {}
 }
 
+/** Detect variant from URL utm_content parameter */
+function detectUtmVariant(): VariantId {
+  try {
+    const params = new URLSearchParams(window.location.search);
+    const utm = params.get('utm_content');
+    if (utm === 'overseas') return 'overseas';
+    if (utm === 'shopping') return 'shopping';
+    if (utm === 'dining') return 'dining';
+  } catch {}
+  return 'default';
+}
+
 export function DemoOverlay() {
   const [enabled, setEnabled] = useState<Set<UseCaseId>>(new Set());
   const [panelOpen, setPanelOpen] = useState(false);
-  // Track which triggered modals are currently visible
   const [modalVisible, setModalVisible] = useState<Set<UseCaseId>>(new Set());
-  // Track which modals have been dismissed (won't re-trigger until toggled off/on)
   const [dismissed, setDismissed] = useState<Set<UseCaseId>>(new Set());
 
-  // Load from sessionStorage on mount (avoids SSR/hydration mismatch)
+  // ─── Hero personalization state ───
+  const [heroVariant, setHeroVariant] = useState<VariantId>('default');
+  const originalContentRef = useRef<OriginalSnapshot | null>(null);
+
+  // Load from sessionStorage on mount
   useEffect(() => {
     const loaded = loadEnabled();
     if (loaded.size > 0) setEnabled(loaded);
+
+    // Detect UTM variant
+    const utmVariant = detectUtmVariant();
+    if (utmVariant !== 'default') {
+      setHeroVariant(utmVariant);
+      // Auto-enable hero personalization if UTM param present
+      if (!loaded.has('hero-personalization')) {
+        loaded.add('hero-personalization');
+        setEnabled(new Set(loaded));
+      }
+    }
+
+    // Restore saved variant
+    try {
+      const saved = sessionStorage.getItem(VARIANT_STORAGE_KEY);
+      if (saved && ['default', 'overseas', 'shopping', 'dining'].includes(saved)) {
+        if (utmVariant === 'default') setHeroVariant(saved as VariantId);
+      }
+    } catch {}
   }, []);
 
-  // Persist to sessionStorage on change (skip the initial empty set)
+  // Persist enabled state
   const mountedRef = useRef(false);
   useEffect(() => {
     if (!mountedRef.current) {
@@ -91,15 +132,53 @@ export function DemoOverlay() {
     saveEnabled(enabled);
   }, [enabled]);
 
+  // Persist hero variant
+  useEffect(() => {
+    try {
+      sessionStorage.setItem(VARIANT_STORAGE_KEY, heroVariant);
+    } catch {}
+  }, [heroVariant]);
+
+  // ─── Hero personalization DOM manipulation ───
+  useEffect(() => {
+    const isActive = enabled.has('hero-personalization');
+
+    if (!isActive) {
+      // Restore originals when disabled
+      if (originalContentRef.current) {
+        restoreOriginals(originalContentRef.current);
+        originalContentRef.current = null;
+      }
+      return;
+    }
+
+    // Save originals on first enable
+    if (!originalContentRef.current) {
+      originalContentRef.current = saveOriginals();
+    }
+
+    if (heroVariant === 'default') {
+      // Restore to default
+      if (originalContentRef.current) {
+        restoreOriginals(originalContentRef.current);
+      }
+    } else {
+      // Apply variant
+      applyVariant(heroVariant);
+    }
+  }, [enabled, heroVariant]);
+
   const configs = useMemo(() => {
     const c: Record<string, Record<string, any>> = {};
     for (const uc of useCaseList) {
-      c[uc.id] = getDefaults(uc.id);
+      if (!uc.domManipulation) {
+        c[uc.id] = getDefaults(uc.id);
+      }
     }
     return c;
   }, []);
 
-  // ─── Delay triggers for popup-dialog, scratch-card, spin-wheel ───
+  // ─── Delay triggers ───
   useEffect(() => {
     const delayIds: UseCaseId[] = ['popup-dialog', 'scratch-card', 'spin-wheel'];
     const timers: ReturnType<typeof setTimeout>[] = [];
@@ -168,16 +247,15 @@ export function DemoOverlay() {
     });
   };
 
-  // ─── Gear button position: shift up for bottom-anchored widgets ───
+  // ─── Gear button position ───
   let gearBottom = 24;
   if (enabled.has('countdown-offer')) gearBottom += 65;
   if (enabled.has('floating-button') || enabled.has('social-proof'))
     gearBottom += 106;
 
-  // ─── Should a use case be rendered? ───
   function shouldRender(uc: UseCaseEntry): boolean {
+    if (uc.domManipulation) return false; // handled via DOM manipulation
     if (!enabled.has(uc.id)) return false;
-    // Triggered modals only render when visible
     if (uc.trigger) return modalVisible.has(uc.id);
     return true;
   }
@@ -291,69 +369,129 @@ export function DemoOverlay() {
             const isEnabled = enabled.has(uc.id);
             const isWaiting = isEnabled && uc.trigger && !modalVisible.has(uc.id);
             return (
-              <button
-                key={uc.id}
-                onClick={() => toggleUseCase(uc.id)}
-                style={{
-                  width: '100%',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '12px',
-                  padding: '12px 20px',
-                  border: 'none',
-                  background: isEnabled ? '#f0fdf4' : 'transparent',
-                  cursor: 'pointer',
-                  textAlign: 'left',
-                  transition: 'background 0.15s',
-                }}
-              >
-                <span style={{ fontSize: '18px', flexShrink: 0 }}>{uc.icon}</span>
-                <div style={{ flex: 1, minWidth: 0 }}>
-                  <span
-                    style={{
-                      fontSize: '13px',
-                      fontWeight: 500,
-                      color: isEnabled ? '#166534' : '#374151',
-                      display: 'block',
-                    }}
-                  >
-                    {uc.title}
-                  </span>
-                  {isWaiting && (
-                    <span style={{ fontSize: '10px', color: '#f59e0b' }}>
-                      {uc.trigger === 'delay'
-                        ? 'Waiting 5s...'
-                        : 'Waiting for exit...'}
-                    </span>
-                  )}
-                </div>
-                {/* Toggle switch */}
-                <div
+              <div key={uc.id}>
+                <button
+                  onClick={() => toggleUseCase(uc.id)}
                   style={{
-                    width: '36px',
-                    height: '20px',
-                    borderRadius: '10px',
-                    background: isEnabled ? '#22c55e' : '#d1d5db',
-                    position: 'relative',
-                    transition: 'background 0.2s',
-                    flexShrink: 0,
+                    width: '100%',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '12px',
+                    padding: '12px 20px',
+                    border: 'none',
+                    background: isEnabled ? '#f0fdf4' : 'transparent',
+                    cursor: 'pointer',
+                    textAlign: 'left',
+                    transition: 'background 0.15s',
                   }}
                 >
+                  <span style={{ fontSize: '18px', flexShrink: 0 }}>{uc.icon}</span>
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <span
+                      style={{
+                        fontSize: '13px',
+                        fontWeight: 500,
+                        color: isEnabled ? '#166534' : '#374151',
+                        display: 'block',
+                      }}
+                    >
+                      {uc.title}
+                    </span>
+                    {isWaiting && (
+                      <span style={{ fontSize: '10px', color: '#f59e0b' }}>
+                        {uc.trigger === 'delay'
+                          ? 'Waiting 5s...'
+                          : 'Waiting for exit...'}
+                      </span>
+                    )}
+                  </div>
+                  {/* Toggle switch */}
                   <div
                     style={{
-                      width: '16px',
-                      height: '16px',
-                      borderRadius: '50%',
-                      background: '#fff',
-                      position: 'absolute',
-                      top: '2px',
-                      left: isEnabled ? '18px' : '2px',
-                      transition: 'left 0.2s',
-                      boxShadow: '0 1px 3px rgba(0,0,0,0.2)',
+                      width: '36px',
+                      height: '20px',
+                      borderRadius: '10px',
+                      background: isEnabled ? '#22c55e' : '#d1d5db',
+                      position: 'relative',
+                      transition: 'background 0.2s',
+                      flexShrink: 0,
                     }}
-                  />
-                </div>
-              </button>
+                  >
+                    <div
+                      style={{
+                        width: '16px',
+                        height: '16px',
+                        borderRadius: '50%',
+                        background: '#fff',
+                        position: 'absolute',
+                        top: '2px',
+                        left: isEnabled ? '18px' : '2px',
+                        transition: 'left 0.2s',
+                        boxShadow: '0 1px 3px rgba(0,0,0,0.2)',
+                      }}
+                    />
+                  </div>
+                </button>
+
+                {/* ─── Hero variant radio buttons + search links ─── */}
+                {uc.id === 'hero-personalization' && isEnabled && (
+                  <div
+                    style={{
+                      padding: '4px 20px 12px 52px',
+                      background: '#f0fdf4',
+                    }}
+                  >
+                    {(['default', 'overseas', 'shopping', 'dining'] as VariantId[]).map((v) => (
+                      <label
+                        key={v}
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '6px',
+                          marginBottom: '4px',
+                          cursor: 'pointer',
+                          fontSize: '12px',
+                          color: '#374151',
+                        }}
+                      >
+                        <input
+                          type="radio"
+                          name="hero-variant"
+                          value={v}
+                          checked={heroVariant === v}
+                          onChange={() => setHeroVariant(v)}
+                          style={{ margin: 0, accentColor: '#22c55e' }}
+                        />
+                        {variantLabels[v]}
+                      </label>
+                    ))}
+                    <div style={{ marginTop: '8px', paddingTop: '8px', borderTop: '1px solid #e5e7eb' }}>
+                      <div style={{ fontSize: '10px', color: '#9ca3af', marginBottom: '4px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                        Simulate Search
+                      </div>
+                      {([
+                        { label: 'Overseas', href: 'search/overseas' },
+                        { label: 'Shopping', href: 'search/shopping' },
+                        { label: 'Dining', href: 'search/dining' },
+                      ] as const).map((link) => (
+                        <a
+                          key={link.href}
+                          href={link.href}
+                          style={{
+                            display: 'block',
+                            fontSize: '11px',
+                            color: '#2563EB',
+                            textDecoration: 'none',
+                            padding: '2px 0',
+                          }}
+                        >
+                          {link.label} &rarr;
+                        </a>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
             );
           })}
         </div>
