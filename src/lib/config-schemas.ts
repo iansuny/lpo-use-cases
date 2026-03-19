@@ -316,6 +316,27 @@ export const spinWheelMeta: Record<keyof SpinWheelConfig, FieldMeta> = {
   delaySeconds: { label: 'Delay (seconds)', type: 'number', min: 0, max: 60, sidebar: true },
 };
 
+// --- Hero Personalization ---
+export const heroPersonalizationSchema = z.object({
+  previewVariant: z.enum(['default', 'overseas', 'shopping', 'dining']).default('default'),
+});
+
+export type HeroPersonalizationConfig = z.infer<typeof heroPersonalizationSchema>;
+
+export const heroPersonalizationMeta: Record<keyof HeroPersonalizationConfig, FieldMeta> = {
+  previewVariant: {
+    label: 'Variant',
+    type: 'radio',
+    sidebar: true,
+    options: [
+      { label: 'Default', value: 'default' },
+      { label: 'Overseas', value: 'overseas' },
+      { label: 'Shopping', value: 'shopping' },
+      { label: 'Dining', value: 'dining' },
+    ],
+  },
+};
+
 // Registry
 export const schemas = {
   'popup-dialog': { schema: popupDialogSchema, meta: popupDialogMeta },
@@ -328,6 +349,7 @@ export const schemas = {
   'dy-script': { schema: dyScriptSchema, meta: dyScriptMeta },
   'scratch-card': { schema: scratchCardSchema, meta: scratchCardMeta },
   'spin-wheel': { schema: spinWheelSchema, meta: spinWheelMeta },
+  'hero-personalization': { schema: heroPersonalizationSchema, meta: heroPersonalizationMeta },
 } as const;
 
 export type UseCaseId = keyof typeof schemas;
@@ -344,6 +366,7 @@ export const primaryColorKey: Record<UseCaseId, string> = {
   'dy-script': '_noop',
   'scratch-card': 'primaryColor',
   'spin-wheel': 'primaryColor',
+  'hero-personalization': '_noop',
 };
 
 /** Which config key holds the CTA destination URL for each use case */
@@ -358,4 +381,5 @@ export const ctaUrlKey: Record<UseCaseId, string> = {
   'dy-script': '_noop',
   'scratch-card': 'ctaUrl',
   'spin-wheel': 'ctaUrl',
+  'hero-personalization': '_noop',
 };
