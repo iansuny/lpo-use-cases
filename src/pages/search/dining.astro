@@ -2,7 +2,7 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 const base = import.meta.env.BASE_URL;
 const query = 'best dining credit card';
-const targetUrl = `${base}?utm_content=dining`;
+const targetUrl = `${base}/?utm_content=dining`;
 ---
 
 <BaseLayout title={`${query} - Google Search`}>
@@ -33,9 +33,9 @@ const targetUrl = `${base}?utm_content=dining`;
   <div style="background:#f8f9fa; border-bottom:1px solid #e5e7eb; padding:8px 24px;">
     <div style="max-width:692px; margin:0 auto; display:flex; gap:8px; align-items:center;">
       <span style="font-size:11px; color:#9ca3af; margin-right:4px;">Scenario:</span>
-      <a href={`${base}search/overseas`} style="font-size:12px; padding:4px 12px; border-radius:16px; text-decoration:none; color:#5f6368; background:#fff; border:1px solid #dadce0;">Overseas</a>
-      <a href={`${base}search/shopping`} style="font-size:12px; padding:4px 12px; border-radius:16px; text-decoration:none; color:#5f6368; background:#fff; border:1px solid #dadce0;">Shopping</a>
-      <a href={`${base}search/dining`} style="font-size:12px; padding:4px 12px; border-radius:16px; text-decoration:none; color:#fff; background:#1a73e8; border:1px solid #1a73e8;">Dining</a>
+      <a href={`${base}/search/overseas`} style="font-size:12px; padding:4px 12px; border-radius:16px; text-decoration:none; color:#5f6368; background:#fff; border:1px solid #dadce0;">Overseas</a>
+      <a href={`${base}/search/shopping`} style="font-size:12px; padding:4px 12px; border-radius:16px; text-decoration:none; color:#5f6368; background:#fff; border:1px solid #dadce0;">Shopping</a>
+      <a href={`${base}/search/dining`} style="font-size:12px; padding:4px 12px; border-radius:16px; text-decoration:none; color:#fff; background:#1a73e8; border:1px solid #1a73e8;">Dining</a>
     </div>
   </div>
 
