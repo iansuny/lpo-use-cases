@@ -12,7 +12,10 @@
       "Bash(git commit:*)",
       "Bash(git push:*)",
       "Bash(gh api:*)",
-      "Bash(git revert:*)"
+      "Bash(git revert:*)",
+      "mcp__Claude_Preview__preview_start",
+      "Bash(git stash:*)",
+      "Bash(git merge:*)"
     ]
   }
 }
