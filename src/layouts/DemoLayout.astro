@@ -1,6 +1,5 @@
 ---
 import '../styles/global.css';
-import AuthGate from '../components/AuthGate';
 
 interface Props {
   title: string;
@@ -28,9 +27,6 @@ const canonicalUrl = new URL(Astro.url.pathname, Astro.site);
     <link rel="canonical" href={canonicalUrl} />
     <link rel="icon" type="image/svg+xml" href={`${base}/favicon.svg`} />
     <title>{title}</title>
-    <style>
-      body:not(.lpo-authed) > *:not([data-auth-gate]) { visibility: hidden; }
-    </style>
     <style is:global>
       html { scroll-behavior: smooth; }
       /* Non-modal overlay: only target the preview component (first child) */
@@ -74,7 +70,6 @@ const canonicalUrl = new URL(Astro.url.pathname, Astro.site);
     </style>
   </head>
   <body class="min-h-screen bg-white text-gray-900 flex flex-col" style="font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;">
-    <AuthGate client:load />
     <slot />
   </body>
 </html>

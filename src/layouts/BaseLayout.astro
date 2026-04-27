@@ -1,6 +1,5 @@
 ---
 import '../styles/global.css';
-import AuthGate from '../components/AuthGate';
 
 interface Props {
   title: string;
@@ -30,12 +29,8 @@ const canonicalUrl = new URL(Astro.url.pathname, Astro.site);
     <link rel="canonical" href={canonicalUrl} />
     <link rel="icon" type="image/svg+xml" href={`${base}favicon.svg`} />
     <title>{title}</title>
-    <style>
-      body:not(.lpo-authed) > *:not([data-auth-gate]) { visibility: hidden; }
-    </style>
   </head>
   <body class={`min-h-screen bg-gray-50 text-gray-900 ${fullBleed ? 'overflow-hidden flex flex-col h-screen' : 'flex flex-col'}`}>
-    <AuthGate client:load />
     <header class="border-b border-gray-200 bg-white flex-shrink-0">
       <div class={`${fullBleed ? 'px-5' : 'mx-auto max-w-7xl px-4'} py-3 flex items-center`}>
         <a href={base} class="text-lg font-bold text-gray-900 hover:text-blue-600 transition-colors">
