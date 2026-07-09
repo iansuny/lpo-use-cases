@@ -9,6 +9,7 @@ import {
 import { TransactionPanel } from './TransactionPanel';
 import { PersonaPanel } from './PersonaPanel';
 import { EdmPreview } from './EdmPreview';
+import { PushPreview } from './PushPreview';
 
 let idCounter = 0;
 const nextId = (): string => `tx-${Date.now().toString(36)}-${idCounter++}`;
@@ -47,9 +48,16 @@ export function BreezeShell() {
         <PersonaPanel derived={derived} />
       </aside>
 
-      {/* RIGHT: live personalized EDM */}
+      {/* RIGHT: live personalized channels — push notification + email */}
       <main class="flex-1 overflow-y-auto bg-gray-100">
-        <EdmPreview persona={persona} edm={edm} />
+        <div class="flex flex-wrap items-start justify-center gap-8 px-6 py-8">
+          <div class="w-[300px] flex-shrink-0">
+            <PushPreview persona={persona} push={edm.push} />
+          </div>
+          <div class="w-full max-w-xl flex-1 min-w-[380px]">
+            <EdmPreview persona={persona} edm={edm} />
+          </div>
+        </div>
       </main>
 
       {/* Gear nav (bottom-right, like the homepage) */}

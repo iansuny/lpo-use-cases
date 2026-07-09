@@ -277,6 +277,7 @@ export interface EdmContent {
   nextRewardPts: number; // points still needed
   mainOffer: { passLabel: string; multiplier: string; title: string; body: string; cta: string };
   merchantOffers: MerchantOffer[];
+  push: { title: string; body: string };
 }
 
 const POINTS_BALANCE = 48250;
@@ -307,6 +308,10 @@ export function buildEdm(personaId: PersonaId, topCountry?: CountryOption): EdmC
         heroHeadline: topCountry ? `Your next ${topCountry.city} adventure, rewarded` : 'The world rewards you',
         heroIcon: '✈️',
         nextReward: topCountry ? `a free night in ${topCountry.city}` : 'a free flight',
+        push: {
+          title: topCountry ? `${topCountry.flag} Your ${topCountry.city} rewards are ready` : 'Your travel rewards are ready',
+          body: `Earn ${mult} points on your next trip — tap to see how.`,
+        },
         mainOffer: topCountry
           ? {
               passLabel: 'BOARDING PASS',
@@ -337,6 +342,7 @@ export function buildEdm(personaId: PersonaId, topCountry?: CountryOption): EdmC
         heroHeadline: 'Shop today, travel tomorrow',
         heroIcon: '🛍️',
         nextReward: 'a $50 travel voucher',
+        push: { title: "Turn today's cart into travel", body: 'Earn 3× points on online shopping right now.' },
         mainOffer: {
           passLabel: 'REWARD PASS',
           multiplier: '3×',
@@ -358,6 +364,7 @@ export function buildEdm(personaId: PersonaId, topCountry?: CountryOption): EdmC
         heroHeadline: 'Taste the world, rewarded',
         heroIcon: '🍽️',
         nextReward: 'a fine-dining experience',
+        push: { title: 'A culinary trip is calling', body: 'Earn 3× points every time you dine today.' },
         mainOffer: {
           passLabel: 'REWARD PASS',
           multiplier: '3×',
@@ -379,6 +386,7 @@ export function buildEdm(personaId: PersonaId, topCountry?: CountryOption): EdmC
         heroHeadline: 'Everyday spending, extraordinary trips',
         heroIcon: '💳',
         nextReward: 'your next getaway',
+        push: { title: 'Your points are adding up', body: 'Every purchase earns Mastercard Travel Rewards.' },
         mainOffer: {
           passLabel: 'REWARD PASS',
           multiplier: '1×',

@@ -39,14 +39,14 @@ function ToolbarIcon({ path, label }: { path: string; label: string }) {
 
 export function EdmPreview({ persona, edm }: Props) {
   return (
-    <div class="mx-auto max-w-2xl px-6 py-6">
+    <div class="w-full">
       {/* Live-preview hint */}
-      <div class="mb-3 flex items-center gap-2 text-xs text-gray-400">
-        <span class="relative flex h-1.5 w-1.5">
-          <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
-          <span class="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-500" />
-        </span>
-        Live preview — this email updates as you change spending on the left.
+      <div class="mb-3 flex items-center gap-2 text-[11px] font-semibold uppercase tracking-wide text-gray-400">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="4" width="20" height="16" rx="2" />
+          <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+        </svg>
+        Email
       </div>
 
       {/* ── Gmail-style open-email view ── */}
